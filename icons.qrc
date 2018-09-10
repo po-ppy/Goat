@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>nu.png</file>
+        <file>nu.ico</file>
+    </qresource>
+</RCC>
