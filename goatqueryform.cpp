@@ -4,8 +4,8 @@
 GoatQueryForm::GoatQueryForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GoatQueryForm)
-  ui->setupUi(this);
 {
+    ui->setupUi(this);
     sqlQueryModel = new QSqlQueryModel(this);
     sortFilterProxyModel = new QSortFilterProxyModel(this);
     changeDialog = new ChangeGoatInfoDialog(this);
