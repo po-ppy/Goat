@@ -19,7 +19,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+public slots:
+    void updateAllTables();
 private slots:
     void change_to_goat_query_form();
     void change_to_sport_data_form();

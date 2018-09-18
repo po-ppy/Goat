@@ -30,6 +30,10 @@ public slots:
     void showAllData();
     void deleteSelected();
     void unbindSelected();
+    void bindSelected();
+signals:
+    void updateSignal();
+    void goatIdSignal(QString);
 
 private slots:
     void on_pushButton_2_clicked();

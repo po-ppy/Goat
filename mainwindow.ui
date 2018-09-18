@@ -50,8 +50,8 @@
     <property name="title">
      <string>设置(&amp;S)</string>
     </property>
-    <addaction name="action_2"/>
     <addaction name="action"/>
+    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">

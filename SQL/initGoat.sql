@@ -18,19 +18,28 @@ alter table bindingInfo add constraint fk_deviceId foreign key(deviceId) referen
 
 #触发器
 delimiter ||
+#create trigger bf_binding before insert
+#on bindingInfo for each row
+#begin
+#  delete from bindingInfo where goatId = NEW.goatId;
+#  delete from bindingInfo where deviceId = NEW.deviceId;
+#end||
 create trigger af_binding after insert
 on bindingInfo for each row
 begin
   update deviceInfo set deviceState = '已绑定' where deviceId = NEW.deviceId;
 end||
+
 create trigger bf_del_deivce before delete
 on goatInfo for each row
 begin
   update deviceInfo set deviceState = '闲置' where deviceInfo.deviceId in (select bindingInfo.deviceId from bindingInfo where bindingInfo.goatId = old.goatId);
 end||
+
 create trigger bf_del_binding before delete
 on bindingInfo for each row
 begin
   update deviceInfo set deviceState = '闲置' where deviceId = old.deviceId;
 end||
+
 delimiter ;

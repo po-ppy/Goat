@@ -29,6 +29,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
 
     connect(actionR1,SIGNAL(triggered(bool)),this,SLOT(deleteSelected()));
     connect(actionR2,SIGNAL(triggered(bool)),this,SLOT(unbindSelected()));
+    connect(actionR3,SIGNAL(triggered(bool)),this,SLOT(bindSelected()));
 }
 
 GoatQueryForm::~GoatQueryForm()
@@ -199,7 +200,13 @@ void GoatQueryForm::unbindSelected(){
         query.exec();
         //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
     }
-    updateTableWidgest();
+    emit updateSignal();
+    //updateTableWidgest();
+}
+
+void GoatQueryForm::bindSelected(){
+    //emit goatIdSignal(ui->tableView->model()->index(ui->tableView->));
+    emit goatIdSignal( ui->tableView->model()->index(ui->tableView->selectionModel()->selectedIndexes().at(0).row(),0).data().toString());
 }
 
 void GoatQueryForm::on_tableView_customContextMenuRequested(const QPoint &pos)
