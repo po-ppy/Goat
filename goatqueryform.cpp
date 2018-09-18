@@ -10,7 +10,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     sortFilterProxyModel = new QSortFilterProxyModel(this);
     changeDialog = new ChangeGoatInfoDialog(this);
     cmenu = new QMenu(ui->tableView);
-    actionR3 = cmenu->addAction("???");
+    actionR3 = cmenu->addAction("绑定");
     actionR1 = cmenu->addAction("删除");
     actionR2 = cmenu->addAction("解绑");
 

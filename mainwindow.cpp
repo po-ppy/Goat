@@ -11,9 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     goatQueryForm = new GoatQueryForm(this);
     deviceQueryForm = new DeviceQueryForm(this);
 
+    bdDialog = new bindingDialog(this);
+
     ui->stackedWidget->addWidget(sportDataForm);
     ui->stackedWidget->addWidget(goatQueryForm);
     ui->stackedWidget->addWidget(deviceQueryForm);
+
 
     this->setWindowTitle("奶山羊行为检测与信息管理系统");
 
@@ -22,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionD,SIGNAL(triggered(bool)),this,SLOT(change_to_goat_query_form()));
     connect(ui->action_3,SIGNAL(triggered(bool)),this,SLOT(change_to_sport_data_form()));
     connect(ui->action_Device_Query,SIGNAL(triggered(bool)),this,SLOT(change_to_device_query_form()));
+    connect(ui->action,SIGNAL(toggled(bool)),bdDialog,SLOT(show()));
     //connect(ui->action_2,SIGNAL(triggered(bool)),this,SLOT(change_to_sport_data_form()));
 
 }

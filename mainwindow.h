@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <bindingdialog.h>
 #include <sportdataform.h>
 #include <goatqueryform.h>
 #include <devicequeryform.h>
+
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +29,7 @@ private:
     SportDataForm *sportDataForm;
     GoatQueryForm *goatQueryForm;
     DeviceQueryForm *deviceQueryForm;
+    bindingDialog *bdDialog;
 };
 
 #endif // MAINWINDOW_H
