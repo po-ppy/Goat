@@ -11,8 +11,9 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     changeDialog = new ChangeGoatInfoDialog(this);
     cmenu = new QMenu(ui->tableView);
     actionR3 = cmenu->addAction("绑定");
-    actionR1 = cmenu->addAction("删除");
     actionR2 = cmenu->addAction("解绑");
+    actionR4 = cmenu->addAction("设备故障");
+    actionR1 = cmenu->addAction("删除");
 
     ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
@@ -30,6 +31,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     connect(actionR1,SIGNAL(triggered(bool)),this,SLOT(deleteSelected()));
     connect(actionR2,SIGNAL(triggered(bool)),this,SLOT(unbindSelected()));
     connect(actionR3,SIGNAL(triggered(bool)),this,SLOT(bindSelected()));
+    connect(actionR4,SIGNAL(triggered(bool)),this,SLOT(errorSelected()));
 }
 
 GoatQueryForm::~GoatQueryForm()
@@ -214,4 +216,24 @@ void GoatQueryForm::on_tableView_customContextMenuRequested(const QPoint &pos)
     if(ui->tableView->selectionModel()->selectedIndexes().size() > 0){
         cmenu->exec(QCursor::pos());
     }
+}
+
+void GoatQueryForm::errorSelected(){
+    QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
+    QList<int> list;
+    foreach(QModelIndex temp, tempList){
+        if(!list.contains(temp.row())){
+            list.append(temp.row());
+        }
+    }
+
+    QSqlQuery query;
+    //query.prepare("delete from bindingInfo where goatId = :goatId;");
+    query.prepare("update deviceInfo set deviceState = '故障' where deviceId = :deviceId;");
+    foreach (int temp, list) {
+        query.bindValue(":deviceId",ui->tableView->model()->index(temp,2).data().toInt());
+        query.exec();
+        qDebug() << ui->tableView->model()->index(temp,0).data().toString();
+    }
+    emit updateSignal();
 }

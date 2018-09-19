@@ -31,6 +31,7 @@ public slots:
     void deleteSelected();
     void unbindSelected();
     void bindSelected();
+    void errorSelected();
 signals:
     void updateSignal();
     void goatIdSignal(QString);
@@ -57,6 +58,7 @@ private:
     QAction *actionR1;
     QAction *actionR2;
     QAction *actionR3;
+    QAction *actionR4;
 //    QStandardItemModel *headerModel;
 };
 

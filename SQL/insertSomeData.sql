@@ -27,9 +27,16 @@ insert into deviceInfo(deviceState,inTime) values('闲置',now());
 insert into deviceInfo(deviceState,inTime) values('闲置',now());
 
 #在绑定信息表中插入数据
-insert into bindingInfo(goatId,deviceId) values(1,1);
-insert into bindingInfo(goatId,deviceId) values(2,2);
-insert into bindingInfo(goatId,deviceId) values(3,3);
-insert into bindingInfo(goatId,deviceId) values(4,4);
-insert into bindingInfo(goatId,deviceId) values(5,5);
-insert into bindingInfo(goatId,deviceId) values(6,6);
+#insert into bindingInfo(goatId,deviceId) values(1,1);
+#insert into bindingInfo(goatId,deviceId) values(2,2);
+#insert into bindingInfo(goatId,deviceId) values(3,3);
+#insert into bindingInfo(goatId,deviceId) values(4,4);
+#insert into bindingInfo(goatId,deviceId) values(5,5);
+#insert into bindingInfo(goatId,deviceId) values(6,6);
+
+insert into bindingInfo(goatId,deviceId) values(1,1) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);
+insert into bindingInfo(goatId,deviceId) values(2,2) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);
+insert into bindingInfo(goatId,deviceId) values(3,3) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);
+insert into bindingInfo(goatId,deviceId) values(4,4) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);
+insert into bindingInfo(goatId,deviceId) values(5,5) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);
+insert into bindingInfo(goatId,deviceId) values(6,6) on duplicate key update goatId = values(goatId),deviceId = values(deviceId);

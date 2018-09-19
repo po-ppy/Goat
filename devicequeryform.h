@@ -7,6 +7,8 @@
 #include <QSqlQueryModel>
 #include <QDebug>
 #include <QDateTime>
+#include <QMenu>
+#include <QAction>
 
 namespace Ui {
 class DeviceQueryForm;

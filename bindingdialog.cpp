@@ -13,7 +13,7 @@ bindingDialog::bindingDialog(QWidget *parent) :
     deviceSortFilterProxyModel = new QSortFilterProxyModel(this);
 
     qSqlQuery = new QSqlQuery(DB::instance().data()->getDb());
-    qSqlQuery->prepare("insert into bindingInfo(goatId ,deviceId) values(:goatId ,:deviceId);");
+    qSqlQuery->prepare("insert into bindingInfo(goatId ,deviceId) values(:goatId ,:deviceId) on duplicate key update goatId=values(goatId),deviceId=values(deviceId);");
     updateGoatTable();
     updateDeviceTable();
 
