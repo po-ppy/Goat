@@ -121,3 +121,10 @@ void bindingDialog::receiveGoatId(QString goatId){
     }
     ui->goatSelected->setText(goatId);
 }
+
+void bindingDialog::receiveDeviceId(QString deviceId){
+    if(!this->isVisible()){
+        this->show();
+    }
+    ui->deviceSelected->setText(deviceId);
+}

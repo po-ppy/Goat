@@ -7,6 +7,8 @@
 #include <QSqlQueryModel>
 #include <QDebug>
 #include <QDateTime>
+#include <QModelIndexList>
+#include <QList>
 #include <QMenu>
 #include <QAction>
 
@@ -21,10 +23,19 @@ class DeviceQueryForm : public QWidget
 public:
     explicit DeviceQueryForm(QWidget *parent = 0);
     ~DeviceQueryForm();
+signals:
+    void updateSignal();
+    void deviceIdSignal(QString);
 public slots:
     void updateTableWidgest();
     void showAllData();
     void updateTableWidgestByState();
+    void bindSelected();
+    void unbindSelected();
+    void errorSelected();
+    void restartSelected();
+    void deleteSelected();
+    void refreshView();
 private slots:
     void on_pushButton_clicked();
 
@@ -36,10 +47,20 @@ private slots:
 
     void on_comboBox_2_activated(const QString &arg1);
 
+    void on_tableView_customContextMenuRequested(const QPoint &pos);
+
+
 private:
     Ui::DeviceQueryForm *ui;
     QSqlQueryModel *sqlQueryModel;
     QSortFilterProxyModel *sortFilterProxyModel;
+    QMenu *cmenu;
+    QAction *actionR1;
+    QAction *actionR2;
+    QAction *actionR3;
+    QAction *actionR4;
+    QAction *actionR5;
+    int refreshFlag;
 };
 
 #endif // DEVICEQUERYFORM_H

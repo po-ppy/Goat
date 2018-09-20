@@ -32,6 +32,7 @@ public slots:
     void updateDeviceTable();
     void startBinding();
     void receiveGoatId(QString goatId);
+    void receiveDeviceId(QString deviceId);
 private slots:
     void on_goatCheckBox_stateChanged(int arg1);
     void on_deviceCheckBox_stateChanged(int arg1);

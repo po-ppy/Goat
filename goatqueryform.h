@@ -32,6 +32,7 @@ public slots:
     void unbindSelected();
     void bindSelected();
     void errorSelected();
+    void refreshView();
 signals:
     void updateSignal();
     void goatIdSignal(QString);
@@ -59,6 +60,7 @@ private:
     QAction *actionR2;
     QAction *actionR3;
     QAction *actionR4;
+    int refreshFlag;
 //    QStandardItemModel *headerModel;
 };
 

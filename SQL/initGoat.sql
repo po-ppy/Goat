@@ -37,13 +37,13 @@ begin
   update deviceInfo set deviceState = '已绑定' where deviceId = NEW.deviceId;
 end||
 
-create trigger af_device_update after update
-on deviceInfo for each row
-begin
-  if NEW.deviceState = '故障' then
-  delete from bindingInfo where deviceId = NEW.deviceId;
-  end if;
-end||
+#create trigger af_device_update after update
+#on deviceInfo for each row
+#begin
+#  if NEW.deviceState = '故障' then
+#  delete from bindingInfo where deviceId = NEW.deviceId;
+#  end if;
+#end||
 
 create trigger bf_del_deivce before delete
 on goatInfo for each row

@@ -27,10 +27,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action,SIGNAL(triggered(bool)),bdDialog,SLOT(show()));
 
     connect(goatQueryForm,SIGNAL(updateSignal()),this,SLOT(updateAllTables()));
+    connect(deviceQueryForm,SIGNAL(updateSignal()),this,SLOT(updateAllTables()));
     connect(bdDialog,SIGNAL(updateSignal()),this,SLOT(updateAllTables()));
     //connect(ui->action_2,SIGNAL(triggered(bool)),this,SLOT(change_to_sport_data_form()));
 
     connect(goatQueryForm,SIGNAL(goatIdSignal(QString)),bdDialog,SLOT(receiveGoatId(QString)));
+    connect(deviceQueryForm,SIGNAL(deviceIdSignal(QString)),bdDialog,SLOT(receiveDeviceId(QString)));
+
 
 }
 
@@ -52,8 +55,8 @@ void MainWindow::change_to_device_query_form(){
 }
 
 void MainWindow::updateAllTables(){
-    goatQueryForm->updateTableWidgest();
-    deviceQueryForm->updateTableWidgest();
+    goatQueryForm->refreshView();
+    deviceQueryForm->refreshView();
     bdDialog->updateGoatTable();
     bdDialog->updateDeviceTable();
 }
