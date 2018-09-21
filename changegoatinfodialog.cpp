@@ -104,3 +104,8 @@ void ChangeGoatInfoDialog::on_pushButton_clicked()
         qDebug() << query.lastError().databaseText();
     }
 }
+
+void ChangeGoatInfoDialog::on_pushButton_3_clicked()
+{
+
+}
