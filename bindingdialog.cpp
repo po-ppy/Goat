@@ -26,9 +26,9 @@ bindingDialog::~bindingDialog()
 
 void bindingDialog::updateGoatTable(){
     if(ui->goatCheckBox->isChecked()){
-        goatSqlQueryModel->setQuery("select a.goatId as 编号,a.nickName as 昵称,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.inTime as 入圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where b.deviceId is NULL;");
+        goatSqlQueryModel->setQuery("select a.goatId as 编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.inTime as 入圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where b.deviceId is NULL;");
     }else{
-        goatSqlQueryModel->setQuery("select a.goatId as 编号,a.nickName as 昵称,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.inTime as 入圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId;");
+        goatSqlQueryModel->setQuery("select a.goatId as 编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.inTime as 入圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId;");
     }
     goatSortFilterProxyModel->setDynamicSortFilter(true);
     goatSortFilterProxyModel->setSourceModel(goatSqlQueryModel);
@@ -88,8 +88,8 @@ void bindingDialog::on_deviceTableView_doubleClicked(const QModelIndex &index)
 }
 
 void bindingDialog::startBinding(){
-    qSqlQuery->bindValue(":goatId",ui->goatSelected->text().toInt());
-    qSqlQuery->bindValue(":deviceId",ui->deviceSelected->text().toInt());
+    qSqlQuery->bindValue(":goatId",ui->goatSelected->text().trimmed());
+    qSqlQuery->bindValue(":deviceId",ui->deviceSelected->text().trimmed());
     if(qSqlQuery->exec()){
         ui->bindingResult->setText("奶山羊("+ui->goatSelected->text()+") 和 设备("+ui->deviceSelected->text()+") 绑定成功 。");
         ui->bindingResult->setStyleSheet("color:green;");

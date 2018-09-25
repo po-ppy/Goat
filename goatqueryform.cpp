@@ -45,7 +45,7 @@ void GoatQueryForm::updateTableWidgest(){
     refreshFlag = 0;
     QSqlQuery query;
    // query.prepare("select goatId as 山羊编号, shehao as 舍号, deviceId as 绑定设备id, weight as 体重, inTime as 入圈时间, outTime as 出圈时间 from goatInfo where shehao = :shehao;");
-    query.prepare("select a.goatId as 奶山羊编号,a.nickName as 昵称,ifnull(b.deviceId,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.houseId = :houseId;");
+    query.prepare("select a.goatId as 奶山羊编号,ifnull(b.deviceId,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.houseId = :houseId;");
     query.bindValue(":houseId",ui->comboBox->currentText());
     query.exec();
     sqlQueryModel->setQuery(query);
@@ -60,7 +60,7 @@ void GoatQueryForm::updateTableWidgest(){
 void GoatQueryForm::showAllData(){
 
     refreshFlag = 1;
-    sqlQueryModel->setQuery("select a.goatId as 奶山羊编号,a.nickName as 昵称,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId");
+    sqlQueryModel->setQuery("select a.goatId as 奶山羊编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId");
 
 
     sortFilterProxyModel->setDynamicSortFilter(true);
@@ -83,7 +83,7 @@ void GoatQueryForm::on_pushButton_3_clicked()
 {
     refreshFlag = 2;
     QSqlQuery query;
-    query.prepare("select a.goatId as 奶山羊编号,a.nickName as 昵称,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.inTime >= :startTime and a.inTime <= :endTime;");
+    query.prepare("select a.goatId as 奶山羊编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.inTime >= :startTime and a.inTime <= :endTime;");
     query.bindValue(":startTime",ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     query.bindValue(":endTime",ui->dateTimeEdit_2->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     query.exec();
@@ -98,7 +98,7 @@ void GoatQueryForm::on_pushButton_clicked()
 {
     refreshFlag = 3;
     QSqlQuery query;
-    query.prepare("select a.goatId as 奶山羊编号,a.nickName as 昵称,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.outTime >= :startTime and a.outTime <= :endTime;");
+    query.prepare("select a.goatId as 奶山羊编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.outTime >= :startTime and a.outTime <= :endTime;");
     query.bindValue(":startTime",ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     query.bindValue(":endTime",ui->dateTimeEdit_2->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
     query.exec();
