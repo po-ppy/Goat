@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     devicequeryform.cpp \
     db.cpp \
     changegoatinfodialog.cpp \
-    bindingdialog.cpp
+    bindingdialog.cpp \
+    logindialog.cpp
 
 HEADERS  += mainwindow.h \
     mainform.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     devicequeryform.h \
     db.h \
     changegoatinfodialog.h \
-    bindingdialog.h
+    bindingdialog.h \
+    logindialog.h
 
 FORMS    += mainwindow.ui \
     form.ui \
@@ -41,7 +43,8 @@ FORMS    += mainwindow.ui \
     goatqueryform.ui \
     devicequeryform.ui \
     changegoatinfodialog.ui \
-    bindingdialog.ui
+    bindingdialog.ui \
+    logindialog.ui
 
 RESOURCES += \
     icons.qrc

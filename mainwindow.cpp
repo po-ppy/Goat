@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    loginDialog = new LoginDialog(this);
+
     sportDataForm = new SportDataForm(this);
     goatQueryForm = new GoatQueryForm(this);
     deviceQueryForm = new DeviceQueryForm(this);
@@ -34,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(goatQueryForm,SIGNAL(goatIdSignal(QString)),bdDialog,SLOT(receiveGoatId(QString)));
     connect(deviceQueryForm,SIGNAL(deviceIdSignal(QString)),bdDialog,SLOT(receiveDeviceId(QString)));
 
+    connect(ui->actionLogin,SIGNAL(triggered(bool)),loginDialog,SLOT(show()));
+    connect(loginDialog,SIGNAL(loginSignal()),this,SLOT(loginOK()));
+    connect(ui->actionLogout,SIGNAL(triggered(bool)),this,SLOT(doLogout()));
+
 
 }
 
@@ -59,4 +65,16 @@ void MainWindow::updateAllTables(){
     deviceQueryForm->refreshView();
     bdDialog->updateGoatTable();
     bdDialog->updateDeviceTable();
+}
+
+void MainWindow::loginOK(){
+    ui->actionLogin->setText("已登录");
+    ui->actionLogin->setDisabled(true);
+    updateAllTables();
+}
+
+void MainWindow::doLogout(){
+    DB::instance().data()->getDb().close();
+    ui->actionLogin->setText("登录");
+    ui->actionLogin->setEnabled(true);
 }

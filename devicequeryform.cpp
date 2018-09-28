@@ -6,7 +6,7 @@ DeviceQueryForm::DeviceQueryForm(QWidget *parent) :
     ui(new Ui::DeviceQueryForm)
 {
     ui->setupUi(this);
-    refreshFlag = 0;
+    refreshFlag = 1;
     sqlQueryModel = new QSqlQueryModel(this);
     sortFilterProxyModel = new QSortFilterProxyModel(this);
 
@@ -22,17 +22,6 @@ DeviceQueryForm::DeviceQueryForm(QWidget *parent) :
     connect(actionR3,SIGNAL(triggered(bool)),this,SLOT(errorSelected()));
     connect(actionR4,SIGNAL(triggered(bool)),this,SLOT(restartSelected()));
     connect(actionR5,SIGNAL(triggered(bool)),this,SLOT(deleteSelected()));
-
-    //ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
-    //ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
-    QSqlQuery query(DB::instance().data()->getDb());
-    query.exec("select * from houseInfo");
-    while(query.next()){
-        ui->comboBox->addItem(query.value(0).toString());
-    }
-    showAllData();
-    //connect(ui->comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(updateTableWidgest()));
-    //connect(changeDialog,SIGNAL(refresh_table()),this,SLOT(updateTableWidgest()));
 }
 
 DeviceQueryForm::~DeviceQueryForm()
@@ -199,6 +188,7 @@ void DeviceQueryForm::deleteSelected(){
 }
 
 void DeviceQueryForm::refreshView(){
+    updateHouseId();
     switch (refreshFlag) {
     case 0:
         updateTableWidgest();
@@ -213,4 +203,21 @@ void DeviceQueryForm::refreshView(){
         updateTableWidgest();
         break;
     }
+}
+
+void DeviceQueryForm::updateHouseId(){
+    int runFlag = refreshFlag;
+    QString curText = ui->comboBox->currentText();
+    ui->comboBox->clear();
+    QSqlQuery query(DB::instance().data()->getDb());
+    query.exec("select * from houseInfo");
+    while(query.next()){
+        ui->comboBox->addItem(query.value(0).toString());
+    }
+    if(!curText.isNull()){
+        if(ui->comboBox->findText(curText) > -1){
+            ui->comboBox->setCurrentText(curText);
+        }
+    }
+    refreshFlag = runFlag;
 }

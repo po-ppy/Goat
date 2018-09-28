@@ -19,6 +19,7 @@ public:
                 return m_pInstance;
     }
     QSqlDatabase& getDb();
+    bool setDb(QString userName, QString userPwd, QString userIp);
 
 private:
     DB();

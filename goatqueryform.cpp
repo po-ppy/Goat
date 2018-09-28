@@ -6,7 +6,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     ui(new Ui::GoatQueryForm)
 {
     ui->setupUi(this);
-    refreshFlag = 0;
+    refreshFlag = 1;
     sqlQueryModel = new QSqlQueryModel(this);
     sortFilterProxyModel = new QSortFilterProxyModel(this);
     changeDialog = new ChangeGoatInfoDialog(this);
@@ -18,14 +18,8 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
 
     ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
-    //goatQueryHeaderModelInit();//表格头部初始化
-    QSqlQuery query(DB::instance().data()->getDb());
-    //query.exec("select distinct shehao from goatInfo;");
-    query.exec("select * from houseInfo");
-    while(query.next()){
-        ui->comboBox->addItem(query.value(0).toString());
-    }
-    updateTableWidgest();
+
+    //updateTableWidgest();
     connect(ui->comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(updateTableWidgest()));
     connect(changeDialog,SIGNAL(refresh_table()),this,SLOT(updateTableWidgest()));
 
@@ -213,6 +207,7 @@ void GoatQueryForm::errorSelected(){
 }
 
 void GoatQueryForm::refreshView(){
+    updateHouseId();
     switch (refreshFlag) {
     case 0:
         updateTableWidgest();
@@ -227,7 +222,25 @@ void GoatQueryForm::refreshView(){
         on_pushButton_clicked();
         break;
     default:
+        qDebug() << refreshFlag;
         updateTableWidgest();
         break;
     }
+}
+
+void GoatQueryForm::updateHouseId(){
+    int runFlag = refreshFlag;
+    QString curText = ui->comboBox->currentText();
+    ui->comboBox->clear();
+    QSqlQuery query(DB::instance().data()->getDb());
+    query.exec("select * from houseInfo");
+    while(query.next()){
+        ui->comboBox->addItem(query.value(0).toString());
+    }
+    if(!curText.isNull()){
+        if(ui->comboBox->findText(curText) > -1){
+            ui->comboBox->setCurrentText(curText);
+        }
+    }
+    refreshFlag = runFlag;
 }

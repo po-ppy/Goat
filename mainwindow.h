@@ -6,6 +6,7 @@
 #include <sportdataform.h>
 #include <goatqueryform.h>
 #include <devicequeryform.h>
+#include <logindialog.h>
 
 
 namespace Ui {
@@ -21,6 +22,8 @@ public:
     ~MainWindow();
 public slots:
     void updateAllTables();
+    void loginOK();
+    void doLogout();
 private slots:
     void change_to_goat_query_form();
     void change_to_sport_data_form();
@@ -31,6 +34,7 @@ private:
     GoatQueryForm *goatQueryForm;
     DeviceQueryForm *deviceQueryForm;
     bindingDialog *bdDialog;
+    LoginDialog *loginDialog;
 };
 
 #endif // MAINWINDOW_H

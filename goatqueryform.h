@@ -33,6 +33,7 @@ public slots:
     void bindSelected();
     void errorSelected();
     void refreshView();
+    void updateHouseId();
 signals:
     void updateSignal();
     void goatIdSignal(QString);

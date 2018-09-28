@@ -36,6 +36,7 @@ public slots:
     void restartSelected();
     void deleteSelected();
     void refreshView();
+    void updateHouseId();
 private slots:
     void on_pushButton_clicked();
 

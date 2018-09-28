@@ -6,7 +6,8 @@
 #include <QSortFilterProxyModel>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
-
+#include <QSqlError>
+#include <QDebug>
 namespace Ui {
 class bindingDialog;
 }
@@ -26,7 +27,7 @@ private:
     QSortFilterProxyModel *goatSortFilterProxyModel;
     QSqlQueryModel *deviceSqlQueryModel;
     QSortFilterProxyModel *deviceSortFilterProxyModel;
-    QSqlQuery *qSqlQuery;
+   // QSqlQuery *qSqlQuery;
 public slots:
     void updateGoatTable();
     void updateDeviceTable();

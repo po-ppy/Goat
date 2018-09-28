@@ -36,7 +36,7 @@
     <property name="title">
      <string>用户(&amp;U)</string>
     </property>
-    <addaction name="actionDenglu"/>
+    <addaction name="actionLogin"/>
     <addaction name="actionLogout"/>
    </widget>
    <widget class="QMenu" name="menu_I">
@@ -72,7 +72,7 @@
    <addaction name="menu_H"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionDenglu">
+  <action name="actionLogin">
    <property name="text">
     <string>登录</string>
    </property>

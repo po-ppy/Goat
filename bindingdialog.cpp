@@ -12,10 +12,10 @@ bindingDialog::bindingDialog(QWidget *parent) :
     deviceSqlQueryModel = new QSqlQueryModel(this);
     deviceSortFilterProxyModel = new QSortFilterProxyModel(this);
 
-    qSqlQuery = new QSqlQuery(DB::instance().data()->getDb());
-    qSqlQuery->prepare("insert into bindingInfo(goatId ,deviceId) values(:goatId ,:deviceId) on duplicate key update goatId=values(goatId),deviceId=values(deviceId);");
-    updateGoatTable();
-    updateDeviceTable();
+    //qSqlQuery = new QSqlQuery();
+
+    //updateGoatTable();
+    //updateDeviceTable();
 
 }
 
@@ -25,6 +25,7 @@ bindingDialog::~bindingDialog()
 }
 
 void bindingDialog::updateGoatTable(){
+
     if(ui->goatCheckBox->isChecked()){
         goatSqlQueryModel->setQuery("select a.goatId as 编号,ifnull(b.deviceId ,'无') as 绑定设备id,a.houseId as 舍号,a.inTime as 入圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where b.deviceId is NULL;");
     }else{
@@ -88,6 +89,8 @@ void bindingDialog::on_deviceTableView_doubleClicked(const QModelIndex &index)
 }
 
 void bindingDialog::startBinding(){
+    QSqlQuery* qSqlQuery = new QSqlQuery();
+    qSqlQuery->prepare("insert into bindingInfo(goatId ,deviceId) values(:goatId ,:deviceId) on duplicate key update goatId=values(goatId),deviceId=values(deviceId);");
     qSqlQuery->bindValue(":goatId",ui->goatSelected->text().trimmed());
     qSqlQuery->bindValue(":deviceId",ui->deviceSelected->text().trimmed());
     if(qSqlQuery->exec()){
@@ -101,6 +104,10 @@ void bindingDialog::startBinding(){
     }else{
         ui->bindingResult->setText("绑定失败！");
         ui->bindingResult->setStyleSheet("color:red;");
+        qDebug() << qSqlQuery->lastQuery();
+          QSqlError err;
+        err= qSqlQuery->lastError();
+         qDebug() << err.text();
     }
 
 }
