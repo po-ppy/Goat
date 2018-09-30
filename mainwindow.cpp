@@ -65,6 +65,7 @@ void MainWindow::updateAllTables(){
     deviceQueryForm->refreshView();
     bdDialog->updateGoatTable();
     bdDialog->updateDeviceTable();
+    sportDataForm->updateTabs();
 }
 
 void MainWindow::loginOK(){

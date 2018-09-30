@@ -12,3 +12,11 @@ MainForm::~MainForm()
 {
     delete ui;
 }
+
+void MainForm::setHouseId(QString inHouseId){
+    houseId = inHouseId;
+}
+
+QString MainForm::getHouseId(){
+    return houseId;
+}

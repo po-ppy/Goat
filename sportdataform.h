@@ -2,12 +2,15 @@
 #define SPORTDATAFORM_H
 
 #include <QWidget>
-#include <mainform.h>
+//#include <mainform.h>
 #include <QMenu>
 #include <QAction>
 #include <QDebug>
 #include <QContextMenuEvent>
 #include <QIcon>
+#include <QSqlQuery>
+#include <informationform.h>
+
 
 namespace Ui {
 class SportDataForm;
@@ -20,7 +23,10 @@ class SportDataForm : public QWidget
 public:
     explicit SportDataForm(QWidget *parent = 0);
     ~SportDataForm();
-
+signals:
+    void updateSignal();
+public slots:
+    void updateTabs();
 private slots:
     void insert_tab();
     void delete_tab();

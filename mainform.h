@@ -14,9 +14,13 @@ class MainForm : public QWidget
 public:
     explicit MainForm(QWidget *parent = 0);
     ~MainForm();
+public slots:
+    void setHouseId(QString inHouseId);
+    QString getHouseId();
 
 private:
     Ui::MainForm *ui;
+    QString houseId;
 };
 
 #endif // MAINFORM_H

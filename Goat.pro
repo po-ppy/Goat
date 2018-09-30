@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     db.cpp \
     changegoatinfodialog.cpp \
     bindingdialog.cpp \
-    logindialog.cpp
+    logindialog.cpp \
+    informationform.cpp
 
 HEADERS  += mainwindow.h \
     mainform.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     db.h \
     changegoatinfodialog.h \
     bindingdialog.h \
-    logindialog.h
+    logindialog.h \
+    informationform.h
 
 FORMS    += mainwindow.ui \
     form.ui \
@@ -44,7 +46,9 @@ FORMS    += mainwindow.ui \
     devicequeryform.ui \
     changegoatinfodialog.ui \
     bindingdialog.ui \
-    logindialog.ui
+    logindialog.ui \
+    informationform.ui \
+    informationform.ui
 
 RESOURCES += \
     icons.qrc
