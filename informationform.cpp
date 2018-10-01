@@ -123,7 +123,7 @@ void InformationForm::updateAllData(){
 void InformationForm::updateGoatList(){
     QSqlQuery query;
    // query.prepare("select goatId as 山羊编号, shehao as 舍号, deviceId as 绑定设备id, weight as 体重, inTime as 入圈时间, outTime as 出圈时间 from goatInfo where shehao = :shehao;");
-    query.prepare("select goatId as 奶山羊编号, status as 运动状态 from sportDataView where houseId = :houseId;");
+    query.prepare("select goatId as 奶山羊编号,datatimem as 时间戳 ,status as 运动状态 from sportDataView where houseId = :houseId;");
     query.bindValue(":houseId",houseId);
     if(query.exec()){
         //qDebug() << houseId;
@@ -161,7 +161,7 @@ void InformationForm::updateHouseData(){
 
 void InformationForm::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    selectOne(index.row(),index.column());
+    selectOne(index.row(),0);
 }
 
 
