@@ -11,7 +11,13 @@
 #include <QSqlQuery>
 #include <QSortFilterProxyModel>
 #include <QSqlQueryModel>
-
+#include <QDateTime>
+#include <QTimer>
+#include <QByteArray>
+#include <QPointF>
+#include <QDebug>
+#include <QtMath>
+#include <QModelIndex>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -30,11 +36,24 @@ public slots:
     void createChart();
     void setHouseId(QString inHouseId);
     QString getHouseId();
+    void updateAllData();
     void updateGoatList();
+    void updateHouseData();
+    void updateChart();
+    double toG(double in);
+    double toG(QByteArray in);
+    double getG(double in1,double in2,double in3);
+    void autoShow();
+    void selectOne(int row,int col);
+private slots:
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::InformationForm *ui;
 
     QString houseId;
+
+    QTimer *freshTimer;
 
     QSqlQueryModel *sqlQueryModel;
     QSortFilterProxyModel *sortFilterProxyModel;
@@ -46,14 +65,17 @@ private:
     QSplineSeries *linex;
     QSplineSeries *liney;
     QSplineSeries *linez;
+    QSplineSeries *lineg;
 
-    QScatterSeries *scatterx;
-    QScatterSeries *scattery;
-    QScatterSeries *scatterz;
+    //QScatterSeries *scatterx;
+    //QScatterSeries *scattery;
+    //QScatterSeries *scatterz;
+    QScatterSeries *scatterg;
 
     QList<QPointF> datax ;
     QList<QPointF> datay ;
     QList<QPointF> dataz ;
+    QList<QPointF> datag ;
 };
 
 #endif // INFORMATIONFORM_H
