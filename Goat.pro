@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     changegoatinfodialog.cpp \
     bindingdialog.cpp \
     logindialog.cpp \
-    informationform.cpp
+    informationform.cpp \
+    addgoatdialog.cpp
 
 HEADERS  += mainwindow.h \
     mainform.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     changegoatinfodialog.h \
     bindingdialog.h \
     logindialog.h \
-    informationform.h
+    informationform.h \
+    addgoatdialog.h
 
 FORMS    += mainwindow.ui \
     form.ui \
@@ -48,7 +50,8 @@ FORMS    += mainwindow.ui \
     bindingdialog.ui \
     logindialog.ui \
     informationform.ui \
-    informationform.ui
+    informationform.ui \
+    addgoatdialog.ui
 
 RESOURCES += \
     icons.qrc

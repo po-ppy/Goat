@@ -169,6 +169,10 @@ void DeviceQueryForm::restartSelected(){
 }
 
 void DeviceQueryForm::deleteSelected(){
+    int confirm = QMessageBox::question(this,"确认","确定删除选中设备吗?",QMessageBox::Yes,QMessageBox::No);
+    if(confirm != QMessageBox::Yes){
+        return;
+    }
     QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
     QList<int> list;
     foreach(QModelIndex temp, tempList){

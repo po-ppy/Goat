@@ -11,6 +11,7 @@
 #include <QList>
 #include <QMenu>
 #include <QAction>
+#include <QMessageBox>
 
 namespace Ui {
 class DeviceQueryForm;

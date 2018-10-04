@@ -10,8 +10,11 @@
 #include <QModelIndexList>
 #include <QList>
 #include <changegoatinfodialog.h>
+#include <addgoatdialog.h>
 #include <QMenu>
 #include <QAction>
+#include <QMessageBox>
+#include <QInputDialog>
 
 namespace Ui {
 class GoatQueryForm;
@@ -34,6 +37,15 @@ public slots:
     void errorSelected();
     void refreshView();
     void updateHouseId();
+    void addHouseId();
+    void deleteHouseId();
+    void renameHouseId();
+    void addMoreHouseId();
+    void moveToHouse();
+    void showNoHouseGoat();
+    void addGoat();
+    void addFromFile();
+    void exportToFile();
 signals:
     void updateSignal();
     void goatIdSignal(QString);
@@ -51,16 +63,35 @@ private slots:
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
 
+    void on_houseIdTableView_customContextMenuRequested(const QPoint &pos);
+
+    void on_addNewHosueButton_clicked();
+
+    void on_showNoHouseGoatButton_clicked();
+
+    void on_addGoatButton_clicked();
+
+    void on_addFromFileButton_clicked();
+
+    void on_exportButton_clicked();
+
 private:
     Ui::GoatQueryForm *ui;
     QSqlQueryModel *sqlQueryModel;
+    QSqlQueryModel *houseQueryModel;
     QSortFilterProxyModel *sortFilterProxyModel;
     ChangeGoatInfoDialog *changeDialog;
+    AddGoatDialog *addGoatDialog;
     QMenu *cmenu;
     QAction *actionR1;
     QAction *actionR2;
     QAction *actionR3;
     QAction *actionR4;
+    QAction *actionMoveToHouse;
+    QMenu *houseMenu;
+    QAction *actionRenameHouse;
+    QAction *actionDeleteHouse;
+    QAction *actionAddHouse;
     int refreshFlag;
 //    QStandardItemModel *headerModel;
 };

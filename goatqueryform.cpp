@@ -8,13 +8,21 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     ui->setupUi(this);
     refreshFlag = 1;
     sqlQueryModel = new QSqlQueryModel(this);
+    houseQueryModel = new QSqlQueryModel(this);
     sortFilterProxyModel = new QSortFilterProxyModel(this);
     changeDialog = new ChangeGoatInfoDialog(this);
+    addGoatDialog = new AddGoatDialog(this);
     cmenu = new QMenu(ui->tableView);
     actionR3 = cmenu->addAction("绑定");
     actionR2 = cmenu->addAction("解绑");
     actionR4 = cmenu->addAction("设备故障");
+    actionMoveToHouse = cmenu->addAction("移舍");
     actionR1 = cmenu->addAction("删除");
+
+    houseMenu = new QMenu(ui->houseIdTableView);
+    actionRenameHouse = houseMenu->addAction("重命名");
+    actionAddHouse = houseMenu->addAction("添加新舍");
+    actionDeleteHouse = houseMenu->addAction("删除");
 
     ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
@@ -27,6 +35,11 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     connect(actionR2,SIGNAL(triggered(bool)),this,SLOT(unbindSelected()));
     connect(actionR3,SIGNAL(triggered(bool)),this,SLOT(bindSelected()));
     connect(actionR4,SIGNAL(triggered(bool)),this,SLOT(errorSelected()));
+    connect(actionMoveToHouse,SIGNAL(triggered(bool)),this,SLOT(moveToHouse()));
+
+    connect(actionAddHouse,SIGNAL(triggered(bool)),this,SLOT(addHouseId()));
+    connect(actionDeleteHouse,SIGNAL(triggered(bool)),this,SLOT(deleteHouseId()));
+    connect(actionRenameHouse,SIGNAL(triggered(bool)),this,SLOT(renameHouseId()));
 }
 
 GoatQueryForm::~GoatQueryForm()
@@ -65,6 +78,19 @@ void GoatQueryForm::showAllData(){
     ui->tableView->horizontalHeader()->setSortIndicator(0,Qt::AscendingOrder);
 
 
+}
+
+void GoatQueryForm::showNoHouseGoat(){
+    refreshFlag = 4;
+    sqlQueryModel->setQuery("select a.goatId as 奶山羊编号,ifnull(b.deviceId ,'无') as 绑定设备编号,a.houseId as 舍号,a.weight as 体重,a.inTime as 入圈时间,a.outTime as 出圈时间 from goatInfo a left join bindingInfo c on a.goatId = c.goatId left join deviceInfo b on b.deviceId = c.deviceId where a.houseId is null;");
+
+
+    sortFilterProxyModel->setDynamicSortFilter(true);
+    sortFilterProxyModel->setSourceModel(sqlQueryModel);
+
+    ui->tableView->setModel(sortFilterProxyModel);
+    ui->tableView->setSortingEnabled(true);
+    ui->tableView->horizontalHeader()->setSortIndicator(0,Qt::AscendingOrder);
 }
 
 void GoatQueryForm::on_pushButton_2_clicked()
@@ -115,23 +141,18 @@ void GoatQueryForm::on_tableView_doubleClicked(const QModelIndex &index)
     changeDialog->show();
 }
 
+
+
 void GoatQueryForm::on_pushButton_4_clicked()
 {
-    QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
-    QList<int> list;
-    foreach(QModelIndex temp, tempList){
-        if(!list.contains(temp.row())){
-            list.append(temp.row());
-        }
-    }
-
-    foreach (int temp, list) {
-        qDebug() << ui->tableView->model()->index(temp,0).data().toString();
-    }
-
+    addMoreHouseId();
 }
 
 void GoatQueryForm::deleteSelected(){
+    int confirm = QMessageBox::question(this,"确认","确定删除选中奶山羊吗?",QMessageBox::Yes,QMessageBox::No);
+    if(confirm != QMessageBox::Yes){
+        return;
+    }
     QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
     QList<int> list;
     foreach(QModelIndex temp, tempList){
@@ -206,6 +227,40 @@ void GoatQueryForm::errorSelected(){
     emit updateSignal();
 }
 
+void GoatQueryForm::moveToHouse(){
+    QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
+    QList<QString> goatlist;
+    foreach(QModelIndex temp, tempList){
+        if(!goatlist.contains(ui->tableView->model()->index(temp.row(),0).data().toString())){
+            goatlist.append(ui->tableView->model()->index(temp.row(),0).data().toString());
+        }
+    }
+    QList<QString> houseList;
+    QSqlQuery query;
+    query.exec("select * from houseInfo;");
+    while(query.next()){
+        houseList.append(query.value("houseId").toString());
+    }
+    bool ok = false;
+    QString newHouse = QInputDialog::getItem(this,"移动","选择移入的舍号:",houseList,0,false,&ok);
+    if(ok && !newHouse.isEmpty()){
+        query.prepare("update goatInfo set houseId = :houseId where goatId = :goatId;");
+
+        foreach (QString temp, goatlist) {
+            query.bindValue(":houseId",newHouse);
+            query.bindValue(":goatId",temp);
+            if(!query.exec()){
+                qDebug() << "houseData数据库插入失败！";
+               qDebug() << query.lastQuery();
+                 QSqlError err;
+               err= query.lastError();
+                qDebug() << err.text();
+            }
+        }
+    }
+    emit updateSignal();
+}
+
 void GoatQueryForm::refreshView(){
     updateHouseId();
     switch (refreshFlag) {
@@ -221,6 +276,9 @@ void GoatQueryForm::refreshView(){
     case 3:
         on_pushButton_clicked();
         break;
+    case 4:
+        showNoHouseGoat();
+        break;
     default:
         qDebug() << refreshFlag;
         updateTableWidgest();
@@ -233,14 +291,169 @@ void GoatQueryForm::updateHouseId(){
     QString curText = ui->comboBox->currentText();
     ui->comboBox->clear();
     QSqlQuery query(DB::instance().data()->getDb());
-    query.exec("select * from houseInfo");
+    query.exec("select houseId as 舍号 from houseInfo");
+    houseQueryModel->setQuery(query);
+    ui->houseIdTableView->setModel(houseQueryModel);
+    ui->houseIdTableView->horizontalHeader()->setStretchLastSection(true);
     while(query.next()){
         ui->comboBox->addItem(query.value(0).toString());
     }
+
     if(!curText.isNull()){
         if(ui->comboBox->findText(curText) > -1){
             ui->comboBox->setCurrentText(curText);
         }
     }
     refreshFlag = runFlag;
+}
+
+void GoatQueryForm::addHouseId(){
+    QSqlQuery query;
+    bool ok = false;
+    QString newName = QInputDialog::getText(this,"请输入新舍命","新舍名:",QLineEdit::Normal,"",&ok);
+    if(ok && !newName.isEmpty()){
+        query.prepare("select houseId from houseInfo where houseId = :houseId;");
+        query.bindValue(":houseId",newName);
+        if(query.size()>0){
+            QMessageBox::warning(this,"警告","此舍命已存在!!");
+            return;
+        }
+    }
+    query.prepare("insert into houseInfo(houseId) values(:houseId);");
+    query.bindValue(":houseId",newName);
+    if(query.exec()){
+        QMessageBox::information(this,"成功","添加新舍成功!");
+        emit updateSignal();
+    }else{
+        QMessageBox::warning(this,"失败","添加新舍失败!");
+    }
+
+}
+
+void GoatQueryForm::renameHouseId(){
+    QSqlQuery query;
+    bool ok = false;
+    QString newName = QInputDialog::getText(this,"请输入新舍命","新舍名:",QLineEdit::Normal,"",&ok);
+    if(ok && !newName.isEmpty()){
+        query.prepare("select houseId from houseInfo where houseId = :houseId;");
+        query.bindValue(":houseId",newName);
+        if(query.size()>0){
+            QMessageBox::warning(this,"警告","此舍命已存在!!");
+            return;
+        }
+        query.prepare("update houseInfo set houseId = :newHouseId where houseId = :houseId;");
+        query.bindValue(":houseId",ui->houseIdTableView->model()->index(ui->houseIdTableView->selectionModel()->selectedIndexes().at(0).row(),0).data().toString());
+        query.bindValue(":newHouseId",newName);
+        if(query.exec()){
+            emit updateSignal();
+            QMessageBox::information(this,"成功","羊舍重命名成功");
+        }else{
+            QMessageBox::warning(this,"失败","数据库错误!");
+        }
+    }
+}
+
+void GoatQueryForm::deleteHouseId(){
+    int confirm = QMessageBox::question(this,"确认","确定删除选中羊舍吗?",QMessageBox::Yes,QMessageBox::No);
+    if(confirm != QMessageBox::Yes){
+        return;
+    }
+    QModelIndexList tempList = ui->houseIdTableView->selectionModel()->selectedIndexes();
+    QList<int> list;
+    foreach(QModelIndex temp, tempList){
+        if(!list.contains(temp.row())){
+            list.append(temp.row());
+        }
+    }
+
+    QSqlQuery query;
+    query.prepare("delete from houseInfo where houseId = :houseId;");
+    foreach (int temp, list) {
+        query.bindValue(":houseId",ui->houseIdTableView->model()->index(temp,0).data().toString());
+        query.exec();
+        //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
+    }
+    emit updateSignal();
+}
+
+void GoatQueryForm::addMoreHouseId(){
+    bool ok = false;
+    int num = QInputDialog::getInt(this,"批量添加","输入填数量",1,1,1000,1,&ok);
+    QSqlQuery query;
+    query.exec("select count(houseId) as housenum from houseInfo");
+    if(query.next()){
+        int start = query.value("housenum").toInt()+1;
+        int count = 0;
+        while(count < num){
+            QString newName = "舍"+QString::number(start);
+            query.prepare("select * from houseInfo where houseId = :houseId;");
+            query.bindValue(":houseId",newName);
+            if(query.exec()){
+                if(query.size()>0){
+                    start += 1;
+                }else{
+                    query.prepare("insert into houseInfo(houseId) values(:houseId);");
+                    query.bindValue(":houseId",newName);
+                    if(query.exec()){
+                        start += 1;
+                        count += 1;
+                    }else{
+                        emit updateSignal();
+                        QMessageBox::warning(this,"失败","数据库出错，添加终止!!");
+                        return;
+                    }
+                }
+            }else{
+                emit updateSignal();
+                QMessageBox::warning(this,"失败","数据库出错，添加终止!!");
+                return;
+            }
+        }
+    }
+    emit updateSignal();
+}
+
+void GoatQueryForm::on_houseIdTableView_customContextMenuRequested(const QPoint &pos)
+{
+    if(ui->houseIdTableView->selectionModel()->selectedIndexes().size() > 0){
+        houseMenu->exec(QCursor::pos());
+    }
+}
+
+void GoatQueryForm::on_addNewHosueButton_clicked()
+{
+    addHouseId();
+}
+
+void GoatQueryForm::on_showNoHouseGoatButton_clicked()
+{
+    showNoHouseGoat();
+}
+
+void GoatQueryForm::on_addGoatButton_clicked()
+{
+    addGoat();
+}
+
+void GoatQueryForm::on_addFromFileButton_clicked()
+{
+    addFromFile();
+}
+
+void GoatQueryForm::on_exportButton_clicked()
+{
+    exportToFile();
+}
+
+void GoatQueryForm::addGoat(){
+    addGoatDialog->show();
+    addGoatDialog->onShowOut();
+}
+
+void GoatQueryForm::addFromFile(){
+
+}
+
+void GoatQueryForm::exportToFile(){
+
 }
