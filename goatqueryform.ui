@@ -191,7 +191,7 @@
           <bool>true</bool>
          </property>
          <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
+          <bool>true</bool>
          </attribute>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>true</bool>
@@ -212,26 +212,6 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <spacer name="horizontalSpacer_6">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="showNoHouseGoatButton">
-           <property name="text">
-            <string>显示未入舍</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
@@ -288,7 +268,7 @@
          <item>
           <widget class="QPushButton" name="exportButton">
            <property name="text">
-            <string>选中导出</string>
+            <string>导出选中</string>
            </property>
           </widget>
          </item>
@@ -342,7 +322,7 @@
           <enum>Qt::CustomContextMenu</enum>
          </property>
          <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
+          <bool>true</bool>
          </attribute>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>true</bool>

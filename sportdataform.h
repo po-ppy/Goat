@@ -33,10 +33,6 @@ private slots:
     void delete_tab(int index);
 //    void contextMenuEvent(QContextMenuEvent *event);
 //    void delete_current_index();
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
 private:
     Ui::SportDataForm *ui;
 

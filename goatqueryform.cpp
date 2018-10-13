@@ -15,6 +15,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     cmenu = new QMenu(ui->tableView);
     actionR3 = cmenu->addAction("绑定");
     actionR2 = cmenu->addAction("解绑");
+    actionExport = cmenu->addAction("导出");
     actionR4 = cmenu->addAction("设备故障");
     actionMoveToHouse = cmenu->addAction("移舍");
     actionR1 = cmenu->addAction("删除");
@@ -40,6 +41,7 @@ GoatQueryForm::GoatQueryForm(QWidget *parent) :
     connect(actionAddHouse,SIGNAL(triggered(bool)),this,SLOT(addHouseId()));
     connect(actionDeleteHouse,SIGNAL(triggered(bool)),this,SLOT(deleteHouseId()));
     connect(actionRenameHouse,SIGNAL(triggered(bool)),this,SLOT(renameHouseId()));
+    connect(actionExport,SIGNAL(triggered(bool)),this,SLOT(exportToFile()));
 }
 
 GoatQueryForm::~GoatQueryForm()
@@ -168,7 +170,8 @@ void GoatQueryForm::deleteSelected(){
         query.exec();
         //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
     }
-    updateTableWidgest();
+    //updateTableWidgest();
+    emit updateSignal();
 }
 
 void GoatQueryForm::unbindSelected(){
@@ -218,8 +221,8 @@ void GoatQueryForm::errorSelected(){
     delQuery.prepare("delete from bindingInfo where deviceId = :deviceId;");
     query.prepare("update deviceInfo set deviceState = '故障' where deviceId = :deviceId;");
     foreach (int temp, list) {
-        delQuery.bindValue(":deviceId",ui->tableView->model()->index(temp,2).data().toInt());
-        query.bindValue(":deviceId",ui->tableView->model()->index(temp,2).data().toInt());
+        delQuery.bindValue(":deviceId",ui->tableView->model()->index(temp,2).data());
+        query.bindValue(":deviceId",ui->tableView->model()->index(temp,2).data());
         delQuery.exec();
         query.exec();
         //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
@@ -425,11 +428,6 @@ void GoatQueryForm::on_addNewHosueButton_clicked()
     addHouseId();
 }
 
-void GoatQueryForm::on_showNoHouseGoatButton_clicked()
-{
-    showNoHouseGoat();
-}
-
 void GoatQueryForm::on_addGoatButton_clicked()
 {
     addGoat();
@@ -451,9 +449,78 @@ void GoatQueryForm::addGoat(){
 }
 
 void GoatQueryForm::addFromFile(){
+    QString filePath = QFileDialog::getOpenFileName(this,tr("打开"),".",tr("文本文档(*.txt)"));
+    if(!filePath.isNull()){
+        QFile file(filePath);
+        if(file.open(QIODevice::ReadOnly|QIODevice::Text)){
+            //qDebug() << "start add from file";
+            QList<QString> errList;
+            int count = 0;
+            while(!file.atEnd()){
+                QList<QString> tempLineList = QString::fromLocal8Bit(file.readLine()).remove("\n").split(" ");
+                tempLineList.removeAll("");
+                tempLineList.removeAll(" ");
+                //qDebug() << tempLineList.length();
+                if(tempLineList.length() == 3){
+                    QSqlQuery query;
+                    query.prepare("insert into goatInfo(goatId,weight,houseId,inTime) values(:goatId,:weight,:houseId,now());");
+                    query.bindValue(":goatId",tempLineList.at(0));
+                    query.bindValue(":weight",tempLineList.at(1).toFloat());
+                    query.bindValue(":houseId",tempLineList.at(2));
+                    if(!query.exec()){
+                        errList.append(tempLineList.at(0));
+                    }else{
+                        count += 1;
+                    }
+                }
+            }
+            //qDebug() << "end add from file";
+            file.close();
+            emit updateSignal();
+            //refreshView();
+            QMessageBox::information(this,"结果",QString::number(count)+"条导入成功,"+QString::number(errList.length())+"条导入失败。(失败信息保存在剪切板中)");
+            if(errList.length() > 0){
+                QClipboard *tempboard = QApplication::clipboard();
+                QString temp = "";
+                foreach (QString elem, errList) {
+                    temp += elem + "\n";
+                }
+                tempboard->setText("导入失败奶山羊编号如下:\n"+temp);
+
+            }
+        }else{
+            qDebug() << "open error!";
+        }
+    }
 
 }
 
 void GoatQueryForm::exportToFile(){
-
+    QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
+    if(tempList.size() < 1){
+        QMessageBox::warning(this,"警告","请先选择要导出的奶山羊!");
+        return;
+    }
+    QList<int> list;
+    foreach(QModelIndex temp, tempList){
+        if(!list.contains(temp.row())){
+            list.append(temp.row());
+        }
+    }
+    QString filePath = QFileDialog::getSaveFileName(this,tr("打开"),".",tr("文本文档(*.txt)"));
+    if(!filePath.isNull()){
+        QFile file(filePath);
+        if(!file.open((QIODevice::WriteOnly | QIODevice::Text))){
+            qDebug() << "Open failed!";
+        }else{
+            QTextStream fileOut(&file);
+            foreach (int temp, list) {
+                for(int i = 0;i<ui->tableView->model()->columnCount();i++){
+                    fileOut << ui->tableView->model()->index(temp,i).data().toString().toLocal8Bit() << " ";
+                }
+                fileOut << "\n";
+            }
+            file.close();
+        }
+    }
 }

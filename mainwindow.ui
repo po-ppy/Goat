@@ -51,13 +51,12 @@
      <string>设置(&amp;S)</string>
     </property>
     <addaction name="action"/>
-    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
      <string>帮助(&amp;H)</string>
     </property>
-    <addaction name="actionEr"/>
+    <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menu_M">
     <property name="title">
@@ -87,7 +86,7 @@
     <string>奶山羊信息管理</string>
    </property>
   </action>
-  <action name="actionEr">
+  <action name="actionHelp">
    <property name="text">
     <string>获取帮助</string>
    </property>

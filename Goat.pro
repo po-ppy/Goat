@@ -5,12 +5,12 @@
 #-------------------------------------------------
 
 QT       += core gui sql charts
+RC_ICONS = nu.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Goat
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -50,8 +50,10 @@ FORMS    += mainwindow.ui \
     bindingdialog.ui \
     logindialog.ui \
     informationform.ui \
-    informationform.ui \
     addgoatdialog.ui
 
 RESOURCES += \
     icons.qrc
+
+DISTFILES += \
+    nu.ico

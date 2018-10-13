@@ -275,7 +275,7 @@
             <enum>QFrame::StyledPanel</enum>
            </property>
            <property name="text">
-            <string>datatimem</string>
+            <string/>
            </property>
           </widget>
          </item>

@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLogin,SIGNAL(triggered(bool)),loginDialog,SLOT(show()));
     connect(loginDialog,SIGNAL(loginSignal()),this,SLOT(loginOK()));
     connect(ui->actionLogout,SIGNAL(triggered(bool)),this,SLOT(doLogout()));
+    setWindowIcon(QIcon(":/nu.ico"));
 
 
 }

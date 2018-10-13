@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QMessageBox>
+#include <QDebug>
+#include <QSqlError>
 
 namespace Ui {
 class AddGoatDialog;
@@ -21,10 +24,11 @@ public slots:
     QString createGoatId();
     void loadHouseId();
     void onShowOut();
+    bool checkGoatId();
 private slots:
     void on_pushButton_clicked();
 
-    void on_pushButton_4_clicked();
+    void on_confirmButton_clicked();
 
 private:
     Ui::AddGoatDialog *ui;

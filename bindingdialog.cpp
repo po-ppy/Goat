@@ -135,3 +135,46 @@ void bindingDialog::receiveDeviceId(QString deviceId){
     }
     ui->deviceSelected->setText(deviceId);
 }
+
+void bindingDialog::addFromFile(){
+    QString filePath = QFileDialog::getOpenFileName(this,"打开",".","文本文档(*.txt)");
+    if(filePath.isNull()){
+        return;
+    }
+    QFile file(filePath);
+    if(file.open(QIODevice::ReadOnly|QIODevice::Text)){
+        QList<QString> errList;
+        int count = 0;
+        QSqlQuery query;
+        query.prepare("insert into bindingInfo(goatId ,deviceId) values(:goatId ,:deviceId) on duplicate key update goatId=values(goatId),deviceId=values(deviceId);");
+        while(!file.atEnd()){
+            QList<QString> tempInfoList = QString::fromLocal8Bit(file.readLine()).remove("\n").split(" ");
+            tempInfoList.removeAll("");
+            tempInfoList.removeAll(" ");
+            query.bindValue(":deviceId",tempInfoList.at(0));
+            query.bindValue(":goatId",tempInfoList.at(1));
+            if(!query.exec()){
+                errList.append(tempInfoList.at(0));
+            }else{
+                count += 1;
+            }
+        }
+        emit updateSignal();
+        QMessageBox::information(this,"结果",QString::number(count)+"条导入成功，"+QString::number(errList.length())+"条导入失败。(失败结果保存在剪切板中");
+        if(errList.length()>0){
+            QClipboard *tempBoard = QApplication::clipboard();
+            QString temp = "";
+            foreach (QString elem, errList) {
+                temp += elem + "\n";
+            }
+            tempBoard->setText("导入失败设备编号如下:\n"+temp);
+        }
+    }else{
+        QMessageBox::warning(this,"警告","文件打开失败!");
+    }
+}
+
+void bindingDialog::on_selectFileButton_clicked()
+{
+    addFromFile();
+}

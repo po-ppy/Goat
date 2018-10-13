@@ -15,6 +15,9 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QFile>
+#include <QFileDialog>
+#pragma execution_character_set("utf-8")
 
 namespace Ui {
 class GoatQueryForm;
@@ -67,8 +70,6 @@ private slots:
 
     void on_addNewHosueButton_clicked();
 
-    void on_showNoHouseGoatButton_clicked();
-
     void on_addGoatButton_clicked();
 
     void on_addFromFileButton_clicked();
@@ -88,6 +89,7 @@ private:
     QAction *actionR3;
     QAction *actionR4;
     QAction *actionMoveToHouse;
+    QAction *actionExport;
     QMenu *houseMenu;
     QAction *actionRenameHouse;
     QAction *actionDeleteHouse;

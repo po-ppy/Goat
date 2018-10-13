@@ -13,6 +13,7 @@ DeviceQueryForm::DeviceQueryForm(QWidget *parent) :
     cmenu = new QMenu(ui->tableView);
     actionR1 = cmenu->addAction("绑定");
     actionR2 = cmenu->addAction("解绑");
+    actionR6 = cmenu->addAction("导出");
     actionR3 = cmenu->addAction("设备故障");
     actionR4 = cmenu->addAction("恢复使用");
     actionR5 = cmenu->addAction("删除");
@@ -22,6 +23,7 @@ DeviceQueryForm::DeviceQueryForm(QWidget *parent) :
     connect(actionR3,SIGNAL(triggered(bool)),this,SLOT(errorSelected()));
     connect(actionR4,SIGNAL(triggered(bool)),this,SLOT(restartSelected()));
     connect(actionR5,SIGNAL(triggered(bool)),this,SLOT(deleteSelected()));
+    connect(actionR6,SIGNAL(triggered(bool)),this,SLOT(exportSelected()));
 }
 
 DeviceQueryForm::~DeviceQueryForm()
@@ -125,6 +127,30 @@ void DeviceQueryForm::unbindSelected(){
     emit updateSignal();
 }
 
+void DeviceQueryForm::exportSelected(){
+    QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
+    QList<int> list;
+    foreach(QModelIndex temp, tempList){
+        if(!list.contains(temp.row())){
+            list.append(temp.row());
+        }
+    }
+    QString filePath = QFileDialog::getSaveFileName(this,"打开",".","文本文档(*.txt)");
+    if(filePath.isNull()){
+        return;
+    }
+    QFile file(filePath);
+    if(!file.open(QIODevice::WriteOnly|QIODevice::Text)){
+        QMessageBox::warning(this,"警告","文件打开失败!");
+        return;
+    }
+    QTextStream outStream(&file);
+    foreach (int temp, list) {
+        outStream << ui->tableView->model()->index(temp,0).data().toString().toLocal8Bit() << " " << ui->tableView->model()->index(temp,2).data().toString().toLocal8Bit() << " " << ui->tableView->model()->index(temp,4).data().toString().toLocal8Bit() << "\n";
+    }
+    file.close();
+}
+
 void DeviceQueryForm::errorSelected(){
     QModelIndexList tempList = ui->tableView->selectionModel()->selectedIndexes();
     QList<int> list;
@@ -140,8 +166,8 @@ void DeviceQueryForm::errorSelected(){
     delQuery.prepare("delete from bindingInfo where deviceId = :deviceId;");
     query.prepare("update deviceInfo set deviceState = '故障' where deviceId = :deviceId;");
     foreach (int temp, list) {
-        delQuery.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data().toInt());
-        query.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data().toInt());
+        delQuery.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data());
+        query.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data());
         delQuery.exec();
         query.exec();
         //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
@@ -161,7 +187,7 @@ void DeviceQueryForm::restartSelected(){
     QSqlQuery query;
     query.prepare("update deviceInfo set deviceState = '闲置' where deviceId = :deviceId;");
     foreach (int temp, list) {
-        query.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data().toInt());
+        query.bindValue(":deviceId",ui->tableView->model()->index(temp,0).data());
         query.exec();
         //qDebug() << ui->tableView->model()->index(temp,0).data().toString();
     }

@@ -46,17 +46,6 @@ void SportDataForm::updateTabs(){
     emit updateSignal();
 }
 
-void SportDataForm::on_pushButton_clicked()
-{
-    insert_tab();
-}
-
-
-void SportDataForm::on_pushButton_2_clicked()
-{
-    delete_tab();
-}
-
 void SportDataForm::delete_tab(int index){
     ui->tabWidget->removeTab(index);
 }

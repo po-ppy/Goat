@@ -8,6 +8,11 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
+#include <QFile>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QClipboard>
+
 namespace Ui {
 class bindingDialog;
 }
@@ -34,6 +39,7 @@ public slots:
     void startBinding();
     void receiveGoatId(QString goatId);
     void receiveDeviceId(QString deviceId);
+    void addFromFile();
 private slots:
     void on_goatCheckBox_stateChanged(int arg1);
     void on_deviceCheckBox_stateChanged(int arg1);
@@ -41,6 +47,7 @@ private slots:
     void on_goatTableView_doubleClicked(const QModelIndex &index);
     void on_deviceTableView_doubleClicked(const QModelIndex &index);
     void on_confirmButton_clicked();
+    void on_selectFileButton_clicked();
 };
 
 #endif // BINDINGDIALOG_H

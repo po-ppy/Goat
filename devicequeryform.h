@@ -12,6 +12,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
 
 namespace Ui {
 class DeviceQueryForm;
@@ -38,6 +40,7 @@ public slots:
     void deleteSelected();
     void refreshView();
     void updateHouseId();
+    void exportSelected();
 private slots:
     void on_pushButton_clicked();
 
@@ -62,6 +65,7 @@ private:
     QAction *actionR3;
     QAction *actionR4;
     QAction *actionR5;
+    QAction *actionR6;
     int refreshFlag;
 };
 

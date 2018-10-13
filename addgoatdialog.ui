@@ -101,13 +101,6 @@
          <item row="1" column="1" colspan="2">
           <widget class="QLineEdit" name="weightLineEdit"/>
          </item>
-         <item row="2" column="3">
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="text">
-            <string>暂不添加</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
