@@ -7,6 +7,7 @@
 #include <goatqueryform.h>
 #include <devicequeryform.h>
 #include <logindialog.h>
+#include <helpdialog.h>
 
 
 namespace Ui {
@@ -35,6 +36,7 @@ private:
     DeviceQueryForm *deviceQueryForm;
     bindingDialog *bdDialog;
     LoginDialog *loginDialog;
+    HelpDialog *helpDialog;
 };
 
 #endif // MAINWINDOW_H

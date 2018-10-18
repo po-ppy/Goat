@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>nu.png</file>
         <file>nu.ico</file>
+        <file>info.png</file>
+        <file>binding.png</file>
+        <file>sport.png</file>
+        <file>user.png</file>
+        <file>question.png</file>
     </qresource>
 </RCC>
