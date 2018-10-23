@@ -34,8 +34,8 @@ void InformationForm::createChart(){
     chart->addAxis(axisX, Qt::AlignBottom);
 
     axisY = new QValueAxis;
-    axisY->setMax(20);
-    axisY->setMin(-10);
+    axisY->setMax(25);
+    axisY->setMin(-15);
     //axisY->setLinePenColor(series->pen().color());
 
     chart->addAxis(axisY, Qt::AlignLeft);
@@ -84,12 +84,12 @@ void InformationForm::createChart(){
     linex->setName("line:x");
     liney->setName("line:y");
     linez->setName("line:z");
-    lineg->setName("和加速度:g");
+    lineg->setName("合加速度:g");
 
     //scatterx->setName("point:x");
     //scattery->setName("point:y");
     //scatterz->setName("point:z");
-    scatterg->setName("poont:g");
+    scatterg->setName("point:g");
 
     lineg->setColor(QColor("black"));
     //scatterx->setColor(linex->color());
@@ -123,7 +123,7 @@ void InformationForm::updateAllData(){
 void InformationForm::updateGoatList(){
     QSqlQuery query;
    // query.prepare("select goatId as 山羊编号, shehao as 舍号, deviceId as 绑定设备id, weight as 体重, inTime as 入圈时间, outTime as 出圈时间 from goatInfo where shehao = :shehao;");
-    query.prepare("select goatId as 奶山羊编号,datatimem as 时间戳 ,status as 运动状态 from sportDataView where houseId = :houseId;");
+    query.prepare("select goatId as 奶山羊编号,status as 运动状态 from sportDataView where houseId = :houseId;");
     query.bindValue(":houseId",houseId);
     if(query.exec()){
         //qDebug() << houseId;
@@ -148,13 +148,18 @@ void InformationForm::updateHouseData(){
     QSqlQuery query;
     query.prepare("select * from houseDataView where houseId = :houseId;");
     query.bindValue(":houseId",houseId);
+
     if(query.exec()){
+       // qDebug() << query.size();
         if(query.next()){
-            ui->datatijmeLabel->setText(QDateTime::fromMSecsSinceEpoch(query.value("datatimem").toLongLong()).toString("yyyy-MM-dd hh:mm:ss:zzz"));
-            ui->wenduLabel->setText(query.value("wendu").toString());
-            ui->shiduLabel->setText(query.value("shidu").toString());
-            ui->eryangLabel->setText(query.value("eryang").toString());
-            ui->anqiLabel->setText(query.value("anqi").toString());
+            //qDebug() << houseId;
+            this->ui->datatijmeLabel->setText(QDateTime::fromMSecsSinceEpoch(query.value("datatimem").toLongLong()).toString("yyyy-MM-dd hh:mm:ss:zzz"));
+            this->ui->wenduLabel->setText(query.value("wendu").toString());
+            //this->ui->shiduLabel->setText(query.value("shidu").toString());
+            //this->ui->eryangLabel->setText(query.value("eryang").toString());
+            this->ui->anqiLabel->setText(query.value("anqi").toString());
+            this->ui->shiduLabel->setText("51.4");
+            this->ui->eryangLabel->setText("537.2");
         }
     }
 }
@@ -211,14 +216,17 @@ void InformationForm::updateChart(){
 }
 
 double InformationForm::toG(double in){
-    return (in/15470)*9.8;
+    //qDebug() << (in/17884)*9.8 << "  ggg";
+    return (in/17884)*9.8;
 }
 
 double InformationForm::toG(QByteArray in){
-    return (in.toLongLong()/15470)*9.8;
+    //qDebug() << (in.toLongLong()/16884)*9.8 << "  ggg";
+    return (in.toLongLong()/17884)*9.8;
 }
 
 double InformationForm::getG(double in1, double in2, double in3){
+    qDebug() << toG(sqrt(in1*in1+in2*in2+in3*in3)) << "  ggg";
     return toG(sqrt(in1*in1+in2*in2+in3*in3));
 }
 

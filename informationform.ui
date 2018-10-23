@@ -46,7 +46,7 @@
               <item>
                <widget class="QLabel" name="wenduLabel">
                 <property name="text">
-                 <string>45</string>
+                 <string>0</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -79,7 +79,7 @@
               <item>
                <widget class="QLabel" name="anqiLabel">
                 <property name="text">
-                 <string>45</string>
+                 <string>0</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -89,7 +89,7 @@
               <item>
                <widget class="QLabel" name="label_5">
                 <property name="text">
-                 <string>ppm</string>
+                 <string>mg/m3</string>
                 </property>
                </widget>
               </item>
@@ -112,7 +112,7 @@
               <item>
                <widget class="QLabel" name="shiduLabel">
                 <property name="text">
-                 <string>45</string>
+                 <string>0</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -145,7 +145,7 @@
               <item>
                <widget class="QLabel" name="eryangLabel">
                 <property name="text">
-                 <string>45</string>
+                 <string>0</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

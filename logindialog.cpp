@@ -16,9 +16,10 @@ LoginDialog::~LoginDialog()
 void LoginDialog::on_pushButton_clicked()
 {
     if(DB::instance().data()->setDb(ui->serverUser->text().trimmed(),ui->serverPassword->text(),ui->serverIp->text().trimmed())){
-        emit loginSignal();
-        QMessageBox::information(this,"登录","登录成功!");
+
+        //QMessageBox::information(this,"登录","登录成功!");
         this->hide();
+        emit loginSignal();
     }else{
         QMessageBox::warning(this,"警告","登录失败!");
     }

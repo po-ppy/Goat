@@ -6,6 +6,7 @@ SportDataForm::SportDataForm(QWidget *parent) :
     ui(new Ui::SportDataForm)
 {
     ui->setupUi(this);
+    //wkThread = new QThread();
 //    setContextMenuPolicy(Qt::DefaultContextMenu);
 //    connect(ui->tabWidget,SIGNAL(tabBarDoubleClicked(int)),this,SLOT(delete_tab()));
     ui->tabWidget->setTabsClosable(true);
@@ -33,7 +34,9 @@ void SportDataForm::updateTabs(){
         //MainForm *temp = new MainForm();
         temp->setHouseId(query.value(0).toString());
         connect(this,SIGNAL(updateSignal()),temp,SLOT(updateGoatList()));
-        ui->tabWidget->addTab(temp,QIcon(":/nu.png"),query.value(0).toString());
+        //temp->moveToThread(wkThread);
+        //wkThread->start();
+        ui->tabWidget->addTab(temp,QIcon(":/she.png"),query.value(0).toString());
     }
     if(memoryFlag){
         for(int i = 0; i < ui->tabWidget->count();i++){
@@ -56,7 +59,7 @@ void SportDataForm::insert_tab(){
 //    ui->tabWidget->addTab(temp,"舍?");
 //    QIcon icon;
 //    icon.addFile(tr(":/nu.png"));
-    ui->tabWidget->addTab(temp,QIcon(":/nu.png"),QString("舍?"));
+    ui->tabWidget->addTab(temp,QIcon(":/she.png"),QString("舍?"));
 }
 
 void SportDataForm::delete_tab(){

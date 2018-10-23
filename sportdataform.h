@@ -9,7 +9,9 @@
 #include <QContextMenuEvent>
 #include <QIcon>
 #include <QSqlQuery>
+#include <QThread>
 #include <informationform.h>
+
 
 
 namespace Ui {
@@ -35,6 +37,7 @@ private slots:
 //    void delete_current_index();
 private:
     Ui::SportDataForm *ui;
+    //QThread *wkThread;
 
 };
 
